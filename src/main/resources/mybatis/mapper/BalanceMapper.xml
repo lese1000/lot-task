@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tp.lottery.service.mapper.BalanceMapper">
+   
+
+    <insert id="addBalance" parameterType="com.tp.lottery.service.entity.PBalance">
+   	 insert into p_balance (
+			player_id,
+			balance_val,
+			create_date
+		)
+		values
+			(
+				#{playerId},
+				#{balanceVal},
+				NOW()
+			)
+    
+    </insert>
+    
+    <insert id="addBalanceRecord" parameterType="com.tp.lottery.service.entity.PBalanceRecord">
+   	 insert into p_balance_record (
+			player_id,
+			balance_type,
+			order_id,
+			balance_val,
+			create_date,
+			create_user
+		)
+		values
+			(
+				#{playerId},
+				#{balanceType},
+				#{orderId},
+				#{balanceVal},
+				NOW(),
+				#{createUser}
+				
+			)
+    
+    </insert>
+	
+	<select id="findDataByPlayId" resultType="com.tp.lottery.service.entity.PBalance" >
+		SELECT id,player_id playerId,balance_val balanceVal,create_date createDate,update_date  updateDate
+		from p_balance 
+		where player_id=#{playerId}
+	</select>
+	
+	<update id="updateBalance" parameterType="com.tp.lottery.service.entity.PBalance">
+		update p_balance
+		set balance_val=balance_val+#{balanceVal},
+		update_date=NOW()
+		where id=#{id}
+	</update>
+	
+
+
+    
+
+
+</mapper>

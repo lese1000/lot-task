@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tp.lottery.service.mapper.LotteryNumMapper">
+
+     <insert id="batchInsert" parameterType="com.tp.lottery.service.entity.LotteryNumEntity">
+		insert into l_lottery_num (
+			lottery_type_id,
+			lottery_num,
+			win_num,
+			open_time,
+			create_date,
+			create_user
+		)
+		values
+		<foreach collection="lotteryNums" item="item" separator=",">
+			(#{item.lotteryTypeId,jdbcType=BIGINT},
+			#{item.lotteryNum,jdbcType=VARCHAR},
+			#{item.winNum,jdbcType=VARCHAR},
+			#{item.openTime,jdbcType=TIMESTAMP},
+			#{item.createDate,jdbcType=TIMESTAMP},
+			#{item.createUser,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	<select id="findLastLottery"  resultType="com.tp.lottery.service.entity.LotteryNumEntity">
+		SELECT id, lottery_type_id lotteryTypeId,lottery_num lotteryNum,
+		win_num winNum,create_date createDate,open_time openTime,update_date updateDate,
+		create_user createUser,update_user updateUser
+		FROM l_lottery_num 
+		where open_time >NOW()
+		ORDER by open_time  LIMIT 0,1
+	</select>
+	
+	<select id="findLotteryByOpenTime"  resultType="com.tp.lottery.service.entity.LotteryNumEntity">
+		SELECT id, lottery_type_id lotteryTypeId,lottery_num lotteryNum,
+		win_num winNum,create_date createDate,open_time openTime,update_date updateDate,
+		create_user createUser,update_user updateUser from l_lottery_num where open_time=NOW();
+	</select>
+
+
+</mapper>

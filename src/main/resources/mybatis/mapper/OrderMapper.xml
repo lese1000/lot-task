@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tp.lottery.service.mapper.OrderMapper">
+   
+
+    <insert id="addOrder" parameterType="com.tp.lottery.service.entity.OrderEntity">
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+          SELECT LAST_INSERT_ID()
+      </selectKey>
+   	 insert into p_order (
+			order_num,
+			lottery_num_id,
+			player_id,
+			is_join_buy,
+			order_status,
+			create_time,
+			total_betting_money,
+			rule_id
+		)
+		values
+			(
+				#{orderNum},
+				#{lotteryNumId},
+				#{playerId},
+				#{isJoinBuy},
+				#{orderStatus},
+				#{createTime},
+				#{totalBettingMoney},
+				#{ruleId}
+			)
+    
+    </insert>
+    
+    <insert id="batchAddOrderDetail" parameterType="com.tp.lottery.service.entity.OrderDetailEntity">
+		insert into p_order_detail (
+			order_id,
+			betting_num,
+			betting_count,
+			betting_money,
+			create_date,
+			rate
+		)
+		values
+		<foreach collection="orderDetails" item="item" separator=",">
+			(#{item.orderId},
+			#{item.bettingNum},
+			#{item.bettingCount},
+			#{item.bettingMoney},
+			#{item.createDate},
+			#{item.rate}
+			)
+		</foreach>
+	</insert>
+	
+	<select id="findOrderByLotteryNumId" resultType="com.tp.lottery.service.entity.OrderDetailEntity" >
+		SELECT a.player_id playerId,b.id,b.order_id orderId,b.betting_money bettingMoney,b.rate,b.betting_num bettingNum,
+		c.win_prize winPrizePrice,c.play_type playType,c.select_number selectNumber
+		from p_order a
+		LEFT JOIN p_order_detail b on a.id=b.order_id
+		LEFT JOIN l_rule c on a.rule_id=c.id
+		where lottery_num_id=#{lotteryNumId}
+	</select>
+	
+	<update id="updateOrderDetailWinPrize" parameterType="com.tp.lottery.service.entity.OrderDetailEntity">
+		update p_order_detail
+		set win_prize=#{winPrize}
+		where id=#{id}
+	</update>
+	
+	<update id="updateOrderWinPrize" parameterType="com.tp.lottery.service.entity.OrderEntity">
+		update p_order
+		set total_win_money=#{totalWinMoney},
+		order_status=#{orderStatus}
+		where id=#{id}
+	</update>
+    
+    
+
+
+    
+
+
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tp.lottery.service.mapper.RuleMapper">
+   
+
+    <select id="findAutoBetting" resultType="com.tp.lottery.service.vo.AutoBettingVO">
+      	 SELECT a.id,a.play_id playId,a.lottery_type_id lotteryTypeId
+      	 ,c.single_price singlePrice,d.id ruleId ,d.play_type playType,d.select_number selectNumber
+      	 FROM l_auto_betting a
+		 LEFT join l_lottery_rule b on a.lottery_type_id=b.lottery_type_id
+		 LEFT join l_lottery_type c on b.lottery_type_id=c.id
+		 LEFT JOIN l_rule d on d.id=b.rule_id;
+    </select>
+
+
+    
+
+
+</mapper>
