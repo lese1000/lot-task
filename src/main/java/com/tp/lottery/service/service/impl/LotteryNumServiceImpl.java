@@ -46,4 +46,10 @@ public class LotteryNumServiceImpl implements LotteryNumService {
 		return lotteryNumMapper.listLotteryByOpenTime();
 	}
 
+	@Override
+	public Long countTodayLotteryNum() {
+		// TODO Auto-generated method stub
+		return lotteryNumMapper.countTodayLotteryNum();
+	}
+
 }

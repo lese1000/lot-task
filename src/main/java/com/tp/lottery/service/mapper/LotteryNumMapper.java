@@ -13,4 +13,6 @@ public interface LotteryNumMapper {
 	LotteryNumEntity findLotteryByOpenTime();
 	
 	List<LotteryNumEntity>listLotteryByOpenTime();
+	
+	Long countTodayLotteryNum();
 }

@@ -51,7 +51,7 @@
 	</select>
 	
 	<select id="countTodayLotteryNum" resultType="long">
-		select count(0) from l_lottery_num where 
+		select count(0) from l_lottery_num where date(begin_time) = date(now())
 	</select>
 
 

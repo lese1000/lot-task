@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class WinNumber {
-	private static String[] winNum=new String[]{"01","02","03","08","09","10","04","05","06","07","11"};
+	private static String[] winNum=new String[]{"06","01","03","08","09","02","10","04","05","07","11"};
 	public static void main(String[] args) {
 //		System.out.println(getWinNumber());
 		System.out.println(randomNum(2,7));

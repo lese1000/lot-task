@@ -15,7 +15,7 @@ public interface LotteryNumService{
 	
 	List<LotteryNumEntity>listLotteryByOpenTime();
 	
-	
+	Long countTodayLotteryNum();
 
 
 }

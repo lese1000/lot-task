@@ -32,8 +32,8 @@ public class OpenPrizeTask {
 	@Autowired
 	private BalanceService balanceService;
 	
-//	@Scheduled(cron="0 0/10 * * * ?")
-	@Scheduled(fixedDelay = 10*60*1000)  
+	@Scheduled(cron="0 0/10 * * * ?")
+//	@Scheduled(fixedDelay = 10*60*1000)  
 	public void openPrize() {
 		logger.info(">> 开奖定时任务启动 <<");
 		try {
@@ -132,6 +132,14 @@ public class OpenPrizeTask {
 			e.printStackTrace();
 			logger.error("openPrize Error",e);
 		}
+		logger.info(">> 开奖定时任务结束 <<");
+	}
+	
+	//服务（重启）启动，判断是否今天是否有未开奖的期号，执行开奖
+//	@Scheduled(fixedDelay = 365*24*60*60*1000)  
+	public void openPrizeWhenServerStart() {
+		logger.info(">>服务（重启）启动，开始执行开奖任务");
+		
 	}
 
 }
