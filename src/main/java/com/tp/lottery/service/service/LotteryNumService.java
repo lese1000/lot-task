@@ -12,6 +12,10 @@ public interface LotteryNumService{
 	LotteryNumEntity findLastLottery();
 	List<AutoBettingVO> findAutoBetting();
 	LotteryNumEntity findLotteryByOpenTime();
+	
+	List<LotteryNumEntity>listLotteryByOpenTime();
+	
+	
 
 
 }

@@ -48,9 +48,9 @@
 	
 	<update id="updateBalance" parameterType="com.tp.lottery.service.entity.PBalance">
 		update p_balance
-		set balance_val=balance_val+#{balanceVal},
-		update_date=NOW()
-		where id=#{id}
+		set balance_val = balance_val + #{balanceVal},
+		update_date = NOW()
+		where id = #{id}
 	</update>
 	
 

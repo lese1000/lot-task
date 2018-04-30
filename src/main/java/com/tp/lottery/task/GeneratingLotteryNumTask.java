@@ -40,7 +40,7 @@ public class GeneratingLotteryNumTask {
 		int i=1;
 		do {
 			LotteryNumEntity lotteruNum=new LotteryNumEntity();
-			lotteruNum.setLotteryNum(lotteryNumPre+leftPad(i));
+			lotteruNum.setLotteryNum(lotteryNumPre + leftPadding(i));
 			lotteruNum.setLotteryTypeId(1l);
 			lotteruNum.setOpenTime(beginDate);
 			lotteruNum.setCreateDate(nowDate);
@@ -53,12 +53,19 @@ public class GeneratingLotteryNumTask {
 		lotteryNumService.batchInsert(lotteryNums);
     }
 	
-	private String leftPad(int i){
+	//第一次或者重启时执行，判断当前是否有期号生成，没有则进行生成
+	@Scheduled(fixedDelay = 1000*60*60*24*365)
+	public void generateLotteryNumWhenReStart() {
+		
+	}
+	
+	
+	private String leftPadding(int i){
 		String str=i+"";
-		if(i<10){
-			str="00"+i;
-		}else if(i<100){
-			str="0"+i;
+		if(i < 10){
+			str = "00" + i;
+		}else if( i < 100){
+			str = "0" + i;
 		}
 		return str;
 		

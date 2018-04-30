@@ -62,6 +62,37 @@ public class BalanceServiceImpl implements BalanceService{
 		return i>0;
 	}
 
+	@Transactional
+	@Override
+	public boolean savaBalanceForJoinBuyFailed(long orderId, long playId, Double returnMoney) {
+		int i=0;
+		try {
+			PBalance pBalance=findDataByPlayId(playId);
+			if(pBalance==null){
+				pBalance=new PBalance();
+				pBalance.setPlayerId(playId);
+				pBalance.setBalanceVal(returnMoney);
+				i=balanceMapper.addBalance(pBalance);
+			}else{
+				pBalance.setBalanceVal(returnMoney);
+				i=balanceMapper.updateBalance(pBalance);
+			}
+			if(i>0){
+				PBalanceRecord pBalanceRecord=new PBalanceRecord();
+				pBalanceRecord.setOrderId(orderId);
+				pBalanceRecord.setPlayerId(playId);
+				pBalanceRecord.setBalanceType(7);
+				pBalanceRecord.setBalanceVal(returnMoney);
+				pBalanceRecord.setCreateUser("system");
+				i=balanceMapper.addBalanceRecord(pBalanceRecord);
+			}
+		} catch (Exception e) {
+			i=0;
+			logger.error("savaBalanceForJoinBuyFailed error ",e);
+		}
+		return i>0;
+	}
+
 	
 	
 

@@ -40,4 +40,10 @@ public class LotteryNumServiceImpl implements LotteryNumService {
 		return lotteryNumMapper.findLotteryByOpenTime();
 	}
 
+	@Override
+	public List<LotteryNumEntity> listLotteryByOpenTime() {
+		// TODO Auto-generated method stub
+		return lotteryNumMapper.listLotteryByOpenTime();
+	}
+
 }

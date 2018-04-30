@@ -9,7 +9,9 @@
 			win_num,
 			open_time,
 			create_date,
-			create_user
+			create_user,
+			begin_time,
+			end_time
 		)
 		values
 		<foreach collection="lotteryNums" item="item" separator=",">
@@ -18,7 +20,9 @@
 			#{item.winNum,jdbcType=VARCHAR},
 			#{item.openTime,jdbcType=TIMESTAMP},
 			#{item.createDate,jdbcType=TIMESTAMP},
-			#{item.createUser,jdbcType=VARCHAR}
+			#{item.createUser,jdbcType=VARCHAR},
+			#{item.beginTime},
+			#{item.endTime}
 			)
 		</foreach>
 	</insert>
@@ -36,6 +40,18 @@
 		SELECT id, lottery_type_id lotteryTypeId,lottery_num lotteryNum,
 		win_num winNum,create_date createDate,open_time openTime,update_date updateDate,
 		create_user createUser,update_user updateUser from l_lottery_num where open_time=NOW();
+	</select>
+	
+	<!-- 取开奖时间一分钟内 -->
+	<select id="listLotteryByOpenTime"  resultType="com.tp.lottery.service.entity.LotteryNumEntity">
+		SELECT id, lottery_type_id lotteryTypeId,lottery_num lotteryNum,
+			win_num winNum,create_date createDate,open_time openTime,update_date updateDate,
+			create_user createUser,update_user updateUser from l_lottery_num 
+		where now() &gt;= open_time and now() &lt; DATE_ADD(open_time,INTERVAL 1 MINUTE)
+	</select>
+	
+	<select id="countTodayLotteryNum" resultType="long">
+		select count(0) from l_lottery_num where 
 	</select>
 
 

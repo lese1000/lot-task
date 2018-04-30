@@ -1,6 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tp.lottery.service.mapper.OrderMapper">
+
+ <resultMap id="OrderBaseResultMap" type="com.tp.lottery.service.entity.Order">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
+    <result column="lottery_num_id" jdbcType="BIGINT" property="lotteryNumId" />
+    <result column="player_id" jdbcType="BIGINT" property="playerId" />
+    <result column="is_join_buy" jdbcType="TINYINT" property="isJoinBuy" />
+    <result column="order_status" jdbcType="TINYINT" property="orderStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="total_win_money" jdbcType="DOUBLE" property="totalWinMoney" />
+    <result column="total_betting_money" jdbcType="DOUBLE" property="totalBettingMoney" />
+    <result column="rule_id" jdbcType="BIGINT" property="ruleId" />
+  </resultMap>
+  
+  <resultMap id="OrderDetailBaseResultMap" type="com.tp.lottery.service.entity.OrderDetail">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="betting_num" jdbcType="VARCHAR" property="bettingNum" />
+    <result column="betting_count" jdbcType="INTEGER" property="bettingCount" />
+    <result column="betting_money" jdbcType="DOUBLE" property="bettingMoney" />
+    <result column="rate" jdbcType="INTEGER" property="rate" />
+    <result column="win_prize" jdbcType="DOUBLE" property="winPrize" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  
+  <resultMap id="JoinBuyDetailaBaseResultMap" type="com.tp.lottery.service.entity.JoinBuyDetail">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="join_buy_id" jdbcType="BIGINT" property="joinBuyId" />
+    <result column="player_id" jdbcType="BIGINT" property="playerId" />
+    <result column="buy_count" jdbcType="INTEGER" property="buyCount" />
+    <result column="buy_money" jdbcType="DOUBLE" property="buyMoney" />
+    <result column="win_prize" jdbcType="DOUBLE" property="winPrize" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  
+  <resultMap id="JoinBuyBaseResultMap" type="com.tp.lottery.service.entity.JoinBuy">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="single_piece_money" jdbcType="DOUBLE" property="singlePieceMoney" />
+    <result column="total_piece_num" jdbcType="INTEGER" property="totalPieceNum" />
+    <result column="remaining_piece_num" jdbcType="INTEGER" property="remainingPieceNum" />
+    <result column="plan_type" jdbcType="TINYINT" property="planType" />
+    <result column="least_num" jdbcType="INTEGER" property="leastNum" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  
+  <resultMap id="RuleBaseResultMap" type="com.tp.lottery.service.entity.Rule">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="rule_name" jdbcType="VARCHAR" property="ruleName" />
+    <result column="is_default" jdbcType="TINYINT" property="isDefault" />
+    <result column="win_prize" jdbcType="DOUBLE" property="winPrize" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="play_type" jdbcType="TINYINT" property="playType" />
+    <result column="select_number" jdbcType="TINYINT" property="selectNumber" />
+  </resultMap>
+  
+  <sql id="Rule_Base_Column_List">
+    id, rule_name, is_default, win_prize, status, remark, create_date, play_type, select_number
+  </sql>
+  
+  <sql id="Join_Buy_Base_Column_List">
+    id, order_id, single_piece_money, total_piece_num, remaining_piece_num, plan_type, 
+    least_num, create_date
+  </sql>
+  
+  <sql id="Join_Buy_Detail_Base_Column_List">
+    id, join_buy_id, player_id, buy_count, buy_money, win_prize, create_date
+  </sql>
+  
+  <sql id="Order_Detail_Base_Column_List">
+    id, order_id, betting_num, betting_count, betting_money, rate, win_prize, create_date
+  </sql>
+  <sql id="Order_Base_Column_List">
+    id, order_num, lottery_num_id, player_id, is_join_buy, order_status, create_time, 
+    total_win_money, total_betting_money, rule_id
+  </sql>
    
 
     <insert id="addOrder" parameterType="com.tp.lottery.service.entity.OrderEntity">
@@ -53,7 +131,7 @@
 	</insert>
 	
 	<select id="findOrderByLotteryNumId" resultType="com.tp.lottery.service.entity.OrderDetailEntity" >
-		SELECT a.player_id playerId,b.id,b.order_id orderId,b.betting_money bettingMoney,b.rate,b.betting_num bettingNum,
+		SELECT a.player_id playerId, a.is_join_buy isJoinBuy ,b.id,b.order_id orderId,b.betting_money bettingMoney,b.rate,b.betting_num bettingNum,
 		c.win_prize winPrizePrice,c.play_type playType,c.select_number selectNumber
 		from p_order a
 		LEFT JOIN p_order_detail b on a.id=b.order_id
@@ -67,17 +145,76 @@
 		where id=#{id}
 	</update>
 	
+	<update id="updateOrderDetailWinPrize2" parameterType="com.tp.lottery.service.entity.OrderDetail">
+		update p_order_detail
+		set win_prize = #{winPrize}
+		where id = #{id}
+	</update>
+	
 	<update id="updateOrderWinPrize" parameterType="com.tp.lottery.service.entity.OrderEntity">
 		update p_order
 		set total_win_money=#{totalWinMoney},
 		order_status=#{orderStatus}
 		where id=#{id}
 	</update>
+	
+	<update id="updateOrderWinPrize2" parameterType="com.tp.lottery.service.entity.Order">
+		update p_order
+		set total_win_money = #{totalWinMoney},
+		order_status = #{orderStatus}
+		where id = #{id}
+	</update>
+	
+	<update id="updateJoinBuyDetailWinPrize" parameterType="com.tp.lottery.service.entity.JoinBuyDetail">
+		update p_join_buy_detail
+		set win_prize = #{winPrize}
+		where id = #{id}
+	</update>
+	
+	 <select id="listOrderSelective" parameterType="com.tp.lottery.service.entity.Order" resultMap="OrderBaseResultMap">
+	  	select <include refid="Order_Base_Column_List"></include>
+	  	from p_order
+	  	<trim prefix="where" prefixOverrides="and" >
+		  	<if test="null != orderNum">
+		  		and order_num = #{orderNum}
+		  	</if>
+		  	<if test="null != lotteryNumId">
+		  		and lottery_num_id = #{lotteryNumId}
+		  	</if>
+		  	<if test="null != isJoinBuy">
+		  		and is_join_buy = #{isJoinBuy}
+		  	</if>
+		  	<if test="null != orderStatus">
+		  		and order_status = #{orderStatus}
+		  	</if>
+		  	order by create_time desc 
+	  	</trim>
+	  </select>
+  
+  <select id="listOrderDetailByOrderId" parameterType="long" resultMap="OrderDetailBaseResultMap">
+  	select <include refid="Order_Detail_Base_Column_List" ></include>
+  		from p_order_detail
+  		where order_id = #{orderId}
+  </select>
+  
+  <select id="getJoinBuyByOrderId" parameterType="long" resultMap="JoinBuyBaseResultMap">
+  	select <include refid="Join_Buy_Base_Column_List"></include>
+  		from p_join_buy
+  		where order_id = #{orderId}
+  </select>
+  
+  <select id="listJoinBuyDetailByJoinBuyId" parameterType="long" resultMap="JoinBuyDetailaBaseResultMap">
+  	select <include refid="Join_Buy_Detail_Base_Column_List"></include>
+  		from p_join_buy_detail
+  		where join_buy_id = #{joinBuyId}
+  </select>
     
     
-
-
-    
-
+	<select id="getRuleByRuleId" parameterType="java.lang.Long" resultMap="RuleBaseResultMap">
+	    select 
+	    <include refid="Rule_Base_Column_List" />
+	    from l_rule
+	    where id = #{ruleId,jdbcType=BIGINT}
+  </select>
 
 </mapper>

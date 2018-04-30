@@ -11,4 +11,6 @@ public interface LotteryNumMapper {
 	
 	LotteryNumEntity findLastLottery();
 	LotteryNumEntity findLotteryByOpenTime();
+	
+	List<LotteryNumEntity>listLotteryByOpenTime();
 }

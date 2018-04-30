@@ -16,6 +16,8 @@ public class OrderDetailEntity {
 	private Double winPrize;
 	private Double winPrizePrice;
 	
+	private Byte isJoinBuy;
+	
 	
 	
 	public Integer getPlayType() {
@@ -89,6 +91,12 @@ public class OrderDetailEntity {
 	}
 	public void setWinPrize(Double winPrize) {
 		this.winPrize = winPrize;
+	}
+	public Byte getIsJoinBuy() {
+		return isJoinBuy;
+	}
+	public void setIsJoinBuy(Byte isJoinBuy) {
+		this.isJoinBuy = isJoinBuy;
 	}
 	
 	
